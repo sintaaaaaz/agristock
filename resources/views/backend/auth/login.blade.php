@@ -75,12 +75,58 @@
 @enderror
 
                         </div>
+                       <div class="mb-3">
+
+
+    <div class="mb-2">
+
+        <img src="{{ captcha_src('default') }}"
+             class="img-fluid border rounded">
+
+    </div>
+
+
+    <input
+        type="text"
+        name="captcha"
+        class="form-control"
+        placeholder="Masukkan kode captcha"
+        required>
+
+
+    @error('kode captcha salah')
+
+    <small class="text-danger">
+        {{ $message }}
+    </small>
+
+    @enderror
+
+
+</div>
 
                         <button class="btn btn-success w-100">
 
                             Login
 
                         </button>
+
+                       
+
+
+<div class="text-center mt-3">
+
+    <small>
+        Belum punya akun?
+    </small>
+
+    <br>
+
+    <a href="{{ route('register') }}">
+        Register sebagai User
+    </a>
+
+</div>
 
                     </form>
 

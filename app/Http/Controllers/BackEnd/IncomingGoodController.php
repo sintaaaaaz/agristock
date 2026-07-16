@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class IncomingGoodController extends Controller
 {
@@ -16,7 +17,7 @@ class IncomingGoodController extends Controller
      */
     public function index()
     {
-        $incomingGoods = IncomingGood::with('supplier')
+        $incomingGoods = IncomingGood::with(['supplier','user'])
         ->latest()
         ->get();
 
@@ -65,8 +66,9 @@ class IncomingGoodController extends Controller
             $incoming = IncomingGood::create([
 
                 'supplier_id'      => $request->supplier_id,
+                'user_id'          => Auth::id(),
             'transaction_code' => $request->transaction_code, // Tambahkan ini
-            'transaction_date' => $request->transaction_date, // Ubah dari 'date'
+            'transaction_date' => $request->transaction_date, 
             'note'             => $request->note
 
             ]);
@@ -117,7 +119,7 @@ class IncomingGoodController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     /**

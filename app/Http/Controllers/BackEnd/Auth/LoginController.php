@@ -23,7 +23,8 @@ class LoginController extends Controller
 {
     $request->validate([
         'email' => 'required|email',
-        'password' => 'required'
+        'password' => 'required',
+        'captcha'=>'required|captcha'
     ]);
 
     if (Auth::attempt([
@@ -33,7 +34,15 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        if (Auth::user()->role->role_name == 'admin') {
+
+    return redirect()->route('dashboard');
+
+} else {
+
+    return redirect()->route('user.dashboard');
+
+}
     }
 
     return back()

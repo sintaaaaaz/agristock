@@ -1,17 +1,32 @@
 <?php
 
 use App\Http\Controllers\Backend\Auth\LoginController;
+use App\Http\Controllers\BackEnd\Auth\RegisterController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\IncomingGoodController;
 use App\Http\Controllers\Backend\OutgoingGoodController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\SupplierController;
+use App\Http\Controllers\Backend\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Rute Halaman Utama
 Route::get('/', function () {
     return redirect()->route('login');
+});
+
+Route::controller(RegisterController::class)->group(function(){
+
+    Route::get('/register',
+        'index'
+    )->name('register');
+
+
+    Route::post('/register',
+        'register'
+    )->name('register.process');
+
 });
 
 // Grup Rute Autentikasi (Sudah Ditutup dengan Benar)
@@ -27,6 +42,12 @@ Route::controller(LoginController::class)->group(function () {
 // Grup Rute Dashboard & Admin (Sudah Ditutup dengan Benar)
 Route::middleware('check.login')->group(function () {
     Route::view('/dashboard', 'backend.dashboard.index')->name('dashboard');
+Route::get('/user/dashboard',
+    [UserDashboardController::class,'index']
+)->name('user.dashboard');
+Route::get('/user/input-barang',
+        [UserDashboardController::class,'create']
+    )->name('user.input');
     Route::resource('categories', CategoryController::class);
     Route::resource('suppliers', SupplierController::class);
     Route::resource('products', ProductController::class);

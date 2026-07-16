@@ -8,6 +8,7 @@ class IncomingGood extends Model
 {
     protected $fillable = [
         'supplier_id',
+        'user_id',
         'transaction_code',
         'transaction_date',
         'note'
@@ -26,4 +27,9 @@ class IncomingGood extends Model
     {
         return $this->hasMany(IncomingGoodDetail::class);
     }
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }

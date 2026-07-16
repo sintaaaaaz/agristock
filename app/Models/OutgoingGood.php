@@ -11,6 +11,7 @@ class OutgoingGood extends Model
         'supplier_id',
         'transaction_date',
         'purpose',
+        'user_id',
         'note',
     ];
 

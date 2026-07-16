@@ -18,6 +18,10 @@ return new class extends Migration
                 ->constrained('suppliers')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
             $table->date('transaction_date');
             $table->text('note')->nullable();
             $table->timestamps();
