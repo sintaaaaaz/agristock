@@ -137,7 +137,14 @@ class IncomingGoodController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $incomingGood = IncomingGood::with([
+        'supplier', 
+        'user', 
+        'incomingGoodDetails.product.unit'
+    ])->findOrFail($id);
+
+    // Mengirimkan variabel ke view show yang sudah kita buat
+    return view('backend.incoming_goods.show', compact('incomingGood'));
     }
 
     /**

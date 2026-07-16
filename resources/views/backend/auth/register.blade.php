@@ -75,6 +75,15 @@
                         </div>
 
                         <button type="submit" class="btn btn-success w-100">Register</button>
+                        <div class="text-center mt-4">
+    <a href="{{ url('/') }}" class="text-decoration-none" style="color: #6c757d; font-size: 0.9rem; transition: 0.3s;">
+        <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Beranda
+    </a>
+</div>
+
+<style>
+    .text-decoration-none:hover { color: #28a745 !important; } /* Warna berubah jadi hijau saat disorot */
+</style>
 
                         <div class="text-center mt-3">
                             <a href="{{ route('login') }}">Sudah punya akun? Login</a>

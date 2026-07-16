@@ -26,45 +26,49 @@ class DashboardController extends Controller
                 ->get();
         }
 
-        // 2. Logika Grafik BARANG MASUK (Sudah Ada)
-        $dataBarangMasuk = IncomingGood::select(
-            DB::raw('COUNT(id) as total'),
-            DB::raw("DATE_FORMAT(transaction_date, '%M') as bulan")
-        )
-        ->whereYear('transaction_date', date('Y'))
-        ->groupBy(DB::raw("MONTH(transaction_date)"), DB::raw("DATE_FORMAT(transaction_date, '%M')"))
-        ->orderBy(DB::raw("MONTH(transaction_date)"), 'asc')
-        ->get();
+       // --- 1. Ambil Data Barang Masuk Harian (Bulan Berjalan) ---
+$dataBarangMasuk = IncomingGood::join('incoming_good_details', 'incoming_goods.id', '=', 'incoming_good_details.incoming_good_id')
+    ->select(
+        DB::raw('DAY(incoming_goods.transaction_date) as hari'),
+        DB::raw('SUM(incoming_good_details.quantity) as total')
+    )
+    ->whereMonth('incoming_goods.transaction_date', date('m')) // Filter bulan sekarang
+    ->whereYear('incoming_goods.transaction_date', date('Y')) // Filter tahun sekarang
+    ->groupBy(DB::raw("DAY(incoming_goods.transaction_date)"))
+    ->orderBy(DB::raw("DAY(incoming_goods.transaction_date)"), 'asc')
+    ->pluck('total', 'hari')
+    ->toArray();
 
-        $labelsIn = [];
-        $totalsIn = [];
-        foreach ($dataBarangMasuk as $data) {
-            $labelsIn[] = $data->bulan;
-            $totalsIn[] = (int) $data->total;
-        }
+// --- 2. Ambil Data Barang Keluar Harian (Bulan Berjalan) ---
+$dataBarangKeluar = OutgoingGood::join('outgoing_good_details', 'outgoing_goods.id', '=', 'outgoing_good_details.outgoing_good_id')
+    ->select(
+        DB::raw('DAY(outgoing_goods.transaction_date) as hari'),
+        DB::raw('SUM(outgoing_good_details.quantity) as total')
+    )
+    ->whereMonth('outgoing_goods.transaction_date', date('m'))
+    ->whereYear('outgoing_goods.transaction_date', date('Y'))
+    ->groupBy(DB::raw("DAY(outgoing_goods.transaction_date)"))
+    ->orderBy(DB::raw("DAY(outgoing_goods.transaction_date)"), 'asc')
+    ->pluck('total', 'hari')
+    ->toArray();
 
-        // 3. TAMBAHKAN: Logika Grafik BARANG KELUAR 
-        $dataBarangKeluar = OutgoingGood::select(
-            DB::raw('COUNT(id) as total'),
-            DB::raw("DATE_FORMAT(transaction_date, '%M') as bulan")
-        )
-        ->whereYear('transaction_date', date('Y'))
-        ->groupBy(DB::raw("MONTH(transaction_date)"), DB::raw("DATE_FORMAT(transaction_date, '%M')"))
-        ->orderBy(DB::raw("MONTH(transaction_date)"), 'asc')
-        ->get();
+// --- 3. Siapkan Label Tanggal 1 s.d. Akhir Bulan ---
+$jumlahHari = date('t'); // Mendapatkan total hari dalam bulan ini (misal 31)
+$labels = range(1, $jumlahHari); 
 
-        $labelsOut = [];
-        $totalsOut = [];
-        foreach ($dataBarangKeluar as $data) {
-            $labelsOut[] = $data->bulan;
-            $totalsOut[] = (int) $data->total;
-        }
+$totalsIn = [];
+$totalsOut = [];
+foreach ($labels as $hari) {
+    $totalsIn[] = isset($dataBarangMasuk[$hari]) ? (int) $dataBarangMasuk[$hari] : 0;
+    $totalsOut[] = isset($dataBarangKeluar[$hari]) ? (int) $dataBarangKeluar[$hari] : 0;
+}
 
-        // 4. Kirimkan semua variabel baru ke view dashboard
+        // --- 5. Kirimkan Variabel Baru ke View ---
         return view('backend.dashboard.index', compact(
             'incomingGoods', 
-            'labelsIn', 'totalsIn', 
-            'labelsOut', 'totalsOut'
+            'labels',       // Label bulan Jan - Des
+            'totalsIn',     // Data Qty Masuk per bulan
+            'totalsOut'     // Data Qty Keluar per bulan
         ));
     }
     public function exportPdf()
