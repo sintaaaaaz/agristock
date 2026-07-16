@@ -48,6 +48,7 @@ Registrasi User
 {{ session('error') }}
 </div>
 
+
 @endif
 
 
@@ -66,6 +67,7 @@ method="POST">
 <input type="text"
 name="name"
 class="form-control"
+value="{{ old('name') }}"
 required>
 
 </div>
@@ -79,6 +81,7 @@ required>
 <input type="email"
 name="email"
 class="form-control"
+value="{{ old('email') }}"
 required>
 
 </div>
@@ -103,7 +106,7 @@ required>
 <label>Konfirmasi Password</label>
 
 <input type="password"
-name="email_verified_at"
+name="password_confirmation"
 class="form-control"
 required>
 
