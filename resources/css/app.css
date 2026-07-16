@@ -1,0 +1,5 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+.custom-sidebar .sidebar-link.active {
+    background-color: #146c43 !important;
+    color: #ffffff !important;
+}
