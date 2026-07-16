@@ -3,100 +3,89 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">Tambah Barang Masuk</h3>
-        <a href="{{ route('incoming-goods.index') }}" class="btn btn-secondary">
+        <h3 class="fw-bold">Input Barang Tani</h3>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary btn-sm rounded-3">
             <i class="fa-solid fa-arrow-left"></i> Kembali
         </a>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
             <form action="{{ route('incoming-goods.store') }}" method="POST">
                 @csrf
 
-                {{-- Supplier --}}
+                {{-- 1. Nama Anda (Sebagai Supplier) --}}
                 <div class="mb-3">
-                    <label class="form-label">Supplier</label>
-                    <select name="supplier_id" class="form-select">
-                        <option value="">-- Pilih Supplier --</option>
-                        @foreach($suppliers as $supplier)
-                            <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                                {{ $supplier->supplier_name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('supplier_id')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                    <label class="form-label fw-semibold text-muted">Supplier (Nama Anda)</label>
+                    <input type="text" class="form-control bg-light border-0 py-2 text-capitalize" value="{{ Auth::user()->name }}" readonly>
+                    <input type="hidden" name="supplier_name" value="{{ Auth::user()->name }}">
                 </div>
 
-                {{-- Nomor Transaksi --}}
+                {{-- 2. Tanggal --}}
                 <div class="mb-3">
-                    <label class="form-label">Nomor Transaksi</label>
-                    <input type="text" name="transaction_code" class="form-control" placeholder="Contoh: BM-001" value="{{ old('transaction_code') }}">
-                    @error('transaction_code')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-
-                {{-- Tanggal --}}
-                <div class="mb-3">
-                    <label class="form-label">Tanggal Masuk</label>
-                    <input type="date" name="transaction_date" class="form-control" value="{{ old('transaction_date', date('Y-m-d')) }}">
+                    <label class="form-label fw-semibold text-muted">Tanggal Masuk</label>
+                    <input type="date" name="transaction_date" class="form-control @error('transaction_date') is-invalid @enderror py-2" value="{{ old('transaction_date', date('Y-m-d')) }}">
                     @error('transaction_date')
-                        <small class="text-danger">{{ $message }}</small>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div> {{-- <-- Perbaikan: Menutup tag div tanggal --}}
+                </div>
 
-                <hr class="my-4">
-                <h5 class="fw-bold mb-3">Detail Barang</h5>
+                <hr class="my-4 text-muted">
 
-                {{-- Produk --}}
+                {{-- 3. Kategori --}}
                 <div class="mb-3">
-                    <label class="form-label">Produk</label>
-                    <select name="product_id" class="form-select">
-                        <option value="">-- Pilih Produk --</option>
-                        @foreach($products as $product)
-                            <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
-                                {{ $product->product_code }} - {{ $product->product_name }} ({{ $product->unit->name ?? '-' }})
+                    <label class="form-label fw-semibold text-muted">Kategori Barang</label>
+                    <select name="category_id" class="form-select @error('category_id') is-invalid @enderror py-2">
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
                             </option>
                         @endforeach
                     </select>
-                    @error('product_id')
-                        <small class="text-danger">{{ $message }}</small>
+                    @error('category_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- 4. Unit / Satuan --}}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-muted">Satuan (Unit)</label>
+                    <select name="unit_id" class="form-select @error('unit_id') is-invalid @enderror py-2">
+                        <option value="">-- Pilih Satuan --</option>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('unit_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="row">
-                    {{-- Quantity --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Jumlah (Quantity)</label>
-                        <input type="number" name="quantity" class="form-control" min="1" placeholder="0" value="{{ old('quantity') }}">
-                        @error('quantity')
-                            <small class="text-danger">{{ $message }}</small>
+                    {{-- 5. Produk (Otomatis Dibuat Berdasarkan Ketikan User) --}}
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold text-muted">Nama Produk Hasil Tani</label>
+                        <input type="text" name="product_name" class="form-control @error('product_name') is-invalid @enderror py-2" placeholder="Contoh: Padi IR64, Jagung Manis" value="{{ old('product_name') }}">
+                        @error('product_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    {{-- Harga Beli --}}
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Harga Beli (Per Satuan)</label>
-                        <input type="number" name="purchase_price" class="form-control" placeholder="0" value="{{ old('purchase_price') }}">
-                        @error('purchase_price')
-                            <small class="text-danger">{{ $message }}</small>
+                    {{-- 6. Jumlah --}}
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold text-muted">Jumlah (Quantity)</label>
+                        <input type="number" name="quantity" class="form-control @error('quantity') is-invalid @enderror py-2" min="1" placeholder="0" value="{{ old('quantity') }}">
+                        @error('quantity')
+                            <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
-                <hr class="my-4">
-
-                {{-- Keterangan --}}
-                <div class="mb-3">
-                    <label class="form-label">Keterangan</label>
-                    <textarea name="note" class="form-control" rows="3">{{ old('note') }}</textarea>
-                </div> {{-- <-- Perbaikan: Menutup tag div keterangan --}}
-
-                <button type="submit" class="btn btn-success">
-                    <i class="fa-solid fa-save"></i> Simpan Barang Masuk
+                <button type="submit" class="btn btn-success w-100 py-2.5 mt-3 rounded-3 fw-bold shadow-sm">
+                    <i class="fa-solid fa-paper-plane me-1"></i> Setor Barang ke Gudang
                 </button>
             </form>
         </div>

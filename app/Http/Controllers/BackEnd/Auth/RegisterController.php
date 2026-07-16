@@ -36,6 +36,7 @@ class RegisterController extends Controller
 
             // otomatis user biasa
             'role_id'=>2
+            
 
         ]);
 

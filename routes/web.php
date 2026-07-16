@@ -16,18 +16,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::controller(RegisterController::class)->group(function(){
-
-    Route::get('/register',
-        'index'
-    )->name('register');
-
-
-    Route::post('/register',
-        'register'
-    )->name('register.process');
-
-});
+Route::get('/register', [RegisterController::class, 'index'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
 
 // Grup Rute Autentikasi (Sudah Ditutup dengan Benar)
 Route::controller(LoginController::class)->group(function () {
