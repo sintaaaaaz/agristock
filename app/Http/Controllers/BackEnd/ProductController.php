@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\IncomingGoodDetail;
 use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -185,6 +186,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        IncomingGoodDetail::where('product_id', $product->id)->delete();
         $product->delete();
 
         return redirect()

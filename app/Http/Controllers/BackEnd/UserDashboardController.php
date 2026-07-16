@@ -4,30 +4,50 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\IncomingGood;
+use App\Models\OutgoingGood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserDashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $incomingGoods = IncomingGood::with([
-    'supplier',
-    'incomingGoodDetails'
-])
-->where('user_id', Auth::id())
-->latest()
-->get();
-
-
-        return view(
-            'backend.user.dashboard',
-            compact('incomingGoods')
-        );
+   public function index()
+{
+    // 1. Ambil data riwayat transaksi untuk tabel khusus milik user yang login
+    if (Auth::user()->role_id == 2) {
+        $incomingGoods = IncomingGood::with(['supplier', 'incomingGoodDetails.product'])
+            ->where('user_id', Auth::id()) 
+            ->latest()
+            ->get();
+    } else {
+        $incomingGoods = IncomingGood::with(['supplier', 'incomingGoodDetails.product'])
+            ->latest()
+            ->get();
     }
+
+    // 2. Logika hitung grafik tren untuk Admin
+    $dataBarangMasuk = IncomingGood::select(
+        DB::raw("COUNT(id) as total"),
+        DB::raw("DATE_FORMAT(transaction_date, '%M') as bulan")
+    )
+    ->whereYear('transaction_date', date('Y'))
+    ->groupBy(DB::raw("MONTH(transaction_date)"), DB::raw("DATE_FORMAT(transaction_date, '%M')"))
+    ->orderBy(DB::raw("MONTH(transaction_date)"), 'asc')
+    ->get();
+
+    $labels = [];
+    $totals = [];
+    foreach ($dataBarangMasuk as $data) {
+        $labels[] = $data->bulan;
+        $totals[] = (int) $data->total;
+    }
+
+    // 3. Kirimkan variabel ke View
+    return view('backend.dashboard.index', compact('incomingGoods', 'labels', 'totals'));
+}
 
     /**
      * Show the form for creating a new resource.

@@ -92,20 +92,17 @@
                 {{-- Kode Produk --}}
 
                 <div class="mb-3">
-
-                    <label class="form-label">
-                        Kode Produk
-                    </label>
-
-
-                    <input type="text"
-                        name="product_code"
-                        class="form-control"
-                        value="{{ $product->product_code }}"
-                        readonly>
-
-
-                </div>
+    <label class="form-label fw-semibold text-muted">
+        Kode Produk <small class="text-danger">(Tidak dapat diubah)</small>
+    </label>
+    
+    <!-- Menggunakan bg-light agar otomatis abu-abu dan readonly agar nilainya tetap terkirim saat disubmit -->
+    <input type="text" 
+        name="product_code" 
+        class="form-control bg-light text-muted fw-bold border-1" 
+        value="{{ $product->product_code }}" 
+        readonly>
+</div>
 
 
 

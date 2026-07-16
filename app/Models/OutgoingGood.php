@@ -23,4 +23,9 @@ class OutgoingGood extends Model
     {
         return $this->hasMany(OutgoingGoodDetail::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

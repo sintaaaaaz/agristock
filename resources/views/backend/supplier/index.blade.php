@@ -10,14 +10,28 @@
     Manajemen Supplier
 </h2>
 
-
+{{-- Notifikasi Jika Berhasil --}}
 @if(session('success'))
-
-<div class="alert alert-success">
-{{ session('success') }}
-</div>
-
+    <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-3" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>{{ session('success') }}</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
+
+{{-- ================= TAMBAHKAN BLOK NOTIFIKASI GAGAL DI SINI ================= --}}
+@if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-3" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>{{ session('error') }}</div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+{{-- =========================================================================== --}}
 
 
 <div class="card shadow-sm">

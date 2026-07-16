@@ -10,11 +10,12 @@ use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\UserDashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\DashboardController;
 
 // Rute Halaman Utama
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('welcome');
+})->name('home');
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
@@ -31,12 +32,11 @@ Route::controller(LoginController::class)->group(function () {
 
 // Grup Rute Dashboard & Admin (Sudah Ditutup dengan Benar)
 Route::middleware('check.login')->group(function () {
-    Route::view('/dashboard', 'backend.dashboard.index')->name('dashboard');
-Route::get('/user/dashboard',
-    [UserDashboardController::class,'index']
-)->name('user.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    Route::get('/user/dashboard', [UserDashboardController::class,'index'])->name('user.dashboard');
 Route::get('/user/input-barang',
-        [UserDashboardController::class,'create']
+        [IncomingGoodController::class,'create']
     )->name('user.input');
     Route::resource('categories', CategoryController::class);
     Route::resource('suppliers', SupplierController::class);
@@ -44,6 +44,13 @@ Route::get('/user/input-barang',
     Route::resource('incoming-goods', IncomingGoodController::class);
     Route::resource('outgoing-goods', OutgoingGoodController::class);
     Route::resource('reports',  ReportController::class);
+
+    Route::get('/dashboard/export-pdf', [DashboardController::class, 'exportPdf'])->name('dashboard.pdf');
+    Route::get('/dashboard/export-excel', [DashboardController::class, 'exportExcel'])->name('dashboard.excel');
+
+    // Tambahkan ini di bawah rute cetak dashboard barang masuk yang sudah ada
+Route::get('/dashboard/export-outgoing-pdf', [DashboardController::class, 'exportOutgoingPdf'])->name('dashboard.outgoing.pdf');
+Route::get('/dashboard/export-outgoing-excel', [DashboardController::class, 'exportOutgoingExcel'])->name('dashboard.outgoing.excel');
     
 }); // <--- Penutup grup middleware yang sebelumnya hilang
 

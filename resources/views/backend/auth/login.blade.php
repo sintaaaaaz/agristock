@@ -123,7 +123,7 @@
     <br>
 
     <a href="{{ route('register') }}">
-        Register sebagai User
+        Register Here
     </a>
 
 </div>

@@ -27,6 +27,18 @@
         @endif
     </div>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>
+                    {{ session('success') }}
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- Statistik --}}
     <div class="row">
         <div class="col-md-4">
@@ -109,7 +121,8 @@
                             <td>
                                 {{ \Carbon\Carbon::parse($item->transaction_date)->format('d-m-Y') }}
                             </td>
-                            <td>{{ $item->supplier->name }}</td>
+                            <!-- PERBAIKAN: Menggunakan supplier_name sesuai kolom asli di DB -->
+                            <td>{{ $item->supplier->supplier_name ?? 'Tanpa Nama' }}</td>
                             <td>
                                 <span class="badge bg-success">Berhasil</span>
                             </td>

@@ -16,7 +16,7 @@
             <div class="card shadow">
                 <div class="card-header bg-success text-white text-center">
                     <h3>🌾 AgriStock</h3>
-                    <small>Registrasi User</small>
+                    <small>Registrasi Akun</small>
                 </div>
 
                 <div class="card-body">

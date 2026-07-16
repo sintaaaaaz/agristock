@@ -110,12 +110,20 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->delete();
+    public function destroy(Supplier $supplier)
+{
+    // Cek apakah supplier ini punya relasi transaksi di tabel incomingGoods
+    if ($supplier->incomingGoods()->exists()) {
         return redirect()
             ->route('suppliers.index')
-            ->with('success', 'Supplier deleted successfully.');
+            ->with('error', 'Gagal menghapus! Supplier ini masih memiliki riwayat transaksi barang masuk.');
     }
+
+    // Jika tidak ada transaksi, baru boleh dihapus permanen
+    $supplier->delete();
+
+    return redirect()
+        ->route('suppliers.index')
+        ->with('success', 'Supplier berhasil dihapus dari sistem.');
+}
 }
