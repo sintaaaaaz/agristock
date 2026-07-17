@@ -14,7 +14,7 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::all();
-        return view('backend.supplier.index', compact('suppliers')); 
+        return view('backend.supplier.index', compact('suppliers'));
     }
 
     /**
@@ -29,34 +29,33 @@ class SupplierController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
 
-    $request->validate([
-        'supplier_name'=>'required',
-        'phone'=>'nullable',
-        'email'=>'nullable|email',
-        'address'=>'required'
-    ]);
-
-
-    Supplier::create([
-
-        'supplier_name'=>$request->supplier_name,
-
-        'phone'=>$request->phone,
-
-        'email'=>$request->email,
-
-        'address'=>$request->address
-
-    ]);
+        $request->validate([
+            'supplier_name' => 'required',
+            'phone' => 'nullable',
+            'email' => 'nullable|email',
+            'address' => 'required'
+        ]);
 
 
-    return redirect()
-        ->route('suppliers.index')
-        ->with('success','Supplier berhasil ditambahkan');
+        Supplier::create([
 
-}
+            'supplier_name' => $request->supplier_name,
+
+            'phone' => $request->phone,
+
+            'email' => $request->email,
+
+            'address' => $request->address
+
+        ]);
+
+
+        return redirect()
+            ->route('suppliers.index')
+            ->with('success', 'Supplier berhasil ditambahkan');
+    }
     /**
      * Display the specified resource.
      */
@@ -78,52 +77,49 @@ class SupplierController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Supplier $supplier)
-{
+    {
 
-    $request->validate([
-        'supplier_name'=>'required',
-        'phone'=>'nullable',
-        'email'=>'nullable|email',
-        'address'=>'required'
-    ]);
-
-
-    $supplier->update([
-
-        'supplier_name'=>$request->supplier_name,
-
-        'phone'=>$request->phone,
-
-        'email'=>$request->email,
-
-        'address'=>$request->address
-
-    ]);
+        $request->validate([
+            'supplier_name' => 'required',
+            'phone' => 'nullable',
+            'email' => 'nullable|email',
+            'address' => 'required'
+        ]);
 
 
-    return redirect()
-        ->route('suppliers.index')
-        ->with('success','Supplier berhasil diperbarui');
+        $supplier->update([
 
-}
+            'supplier_name' => $request->supplier_name,
+
+            'phone' => $request->phone,
+
+            'email' => $request->email,
+
+            'address' => $request->address
+
+        ]);
+
+
+        return redirect()
+            ->route('suppliers.index')
+            ->with('success', 'Supplier berhasil diperbarui');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Supplier $supplier)
-{
-    // Cek apakah supplier ini punya relasi transaksi di tabel incomingGoods
-    if ($supplier->incomingGoods()->exists()) {
+    {
+        if ($supplier->incomingGoods()->exists()) {
+            return redirect()
+                ->route('suppliers.index')
+                ->with('error', 'Gagal menghapus! Supplier ini masih memiliki riwayat transaksi barang masuk.');
+        }
+
+        $supplier->delete();
+
         return redirect()
             ->route('suppliers.index')
-            ->with('error', 'Gagal menghapus! Supplier ini masih memiliki riwayat transaksi barang masuk.');
+            ->with('success', 'Supplier berhasil dihapus dari sistem.');
     }
-
-    // Jika tidak ada transaksi, baru boleh dihapus permanen
-    $supplier->delete();
-
-    return redirect()
-        ->route('suppliers.index')
-        ->with('success', 'Supplier berhasil dihapus dari sistem.');
-}
 }

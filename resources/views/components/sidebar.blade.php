@@ -12,7 +12,7 @@
             </a>
 
             <!-- KHUSUS USER BIASA SAJA (role_id == 2) -->
-            @if(Auth::check() && Auth::user()->role_id == 2)
+            @if (Auth::check() && Auth::user()->role_id == 2)
                 <a href="{{ route('incoming-goods.create') }}"
                     class="list-group-item list-group-item-action border-0 rounded-3 mb-1 px-3 py-3 d-flex align-items-center sidebar-link
                     {{ request()->routeIs('incoming-goods.create') ? 'active' : '' }}">
@@ -23,8 +23,7 @@
 
 
             <!-- KHUSUS ADMINISTRATOR SAJA (role_id == 1) -->
-            @if(Auth::check() && Auth::user()->role_id == 1)
-                
+            @if (Auth::check() && Auth::user()->role_id == 1)
                 <a href="{{ route('categories.index') }}"
                     class="list-group-item list-group-item-action border-0 rounded-3 mb-1 px-3 py-3 d-flex align-items-center sidebar-link
                     {{ request()->routeIs('categories.*') ? 'active' : '' }}">
@@ -66,22 +65,8 @@
                     <i class="fa-solid fa-file-invoice-dollar me-3 sidebar-icon"></i>
                     <span>Laporan</span>
                 </a>
-
             @endif
 
         </div>
     </div>
-
-    {{-- <!-- Bagian Bawah: Tombol Logout -->
-    @if(Auth::check())
-        <div class="mt-auto pt-4 border-top w-100">
-            <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin logout?')">
-                @csrf
-                <button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center py-2 rounded-3 border-0" style="background-color: rgba(220, 53, 69, 0.05);">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
-                    <span class="fw-semibold">Keluar Aplikasi</span>
-                </button>
-            </form>
-        </div>
-    @endif --}}
 </div>

@@ -1,43 +1,37 @@
 @extends('layouts.backend')
 
 @section('content')
+    <h3>Edit Kategori</h3>
 
-<h3>Edit Kategori</h3>
+    <form action="{{ route('categories.update', $category->id) }}" method="POST">
 
-<form action="{{ route('categories.update', $category->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    @csrf
-    @method('PUT')
+        <div class="mb-3">
 
-    <div class="mb-3">
+            <label class="form-label">
+                Nama Kategori
+            </label>
 
-        <label class="form-label">
-            Nama Kategori
-        </label>
+            <input type="text" name="category_name" class="form-control @error('category_name') is-invalid @enderror"
+                value="{{ old('category_name', $category->category_name) }}">
 
-        <input
-            type="text"
-            name="category_name"
-            class="form-control @error('category_name') is-invalid @enderror"
-            value="{{ old('category_name', $category->category_name) }}">
+            @error('category_name')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
 
-        @error('category_name')
-            <div class="invalid-feedback">
-                {{ $message }}
-            </div>
-        @enderror
+        </div>
 
-    </div>
+        <button class="btn btn-primary">
+            Update
+        </button>
 
-    <button class="btn btn-primary">
-        Update
-    </button>
+        <a href="{{ route('categories.index') }}" class="btn btn-secondary">
+            Kembali
+        </a>
 
-    <a href="{{ route('categories.index') }}"
-       class="btn btn-secondary">
-        Kembali
-    </a>
-
-</form>
-
+    </form>
 @endsection

@@ -20,47 +20,45 @@ class LoginController extends Controller
      * Proses Login
      */
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-        'captcha'=>'required|captcha'
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'captcha' => 'required|captcha'
+        ]);
 
-    if (Auth::attempt([
-        'email' => $request->email,
-        'password' => $request->password
-    ])) {
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ])) {
 
-        $request->session()->regenerate();
+            $request->session()->regenerate();
 
-        if (Auth::user()->role->role_name == 'admin') {
+            if (Auth::user()->role->role_name == 'admin') {
 
-    return redirect()->route('dashboard');
+                return redirect()->route('dashboard');
+            } else {
 
-} else {
+                return redirect()->route('user.dashboard');
+            }
+        }
 
-    return redirect()->route('user.dashboard');
-
-}
+        return back()
+            ->withInput()
+            ->with('error', 'Email atau password salah.');
     }
-
-    return back()
-        ->withInput()
-        ->with('error', 'Email atau password salah.');
-}
 
     /**
      * Logout
      */
     public function logout(Request $request)
-{
-    Auth::logout();
+    {
+        Auth::logout();
 
-    $request->session()->invalidate();
+        $request->session()->invalidate();
 
-    $request->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
-    return redirect()->route('login');
-}
+        return redirect()->route('login');
+    }
 }

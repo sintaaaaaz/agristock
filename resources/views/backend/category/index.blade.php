@@ -1,109 +1,99 @@
 @extends('layouts.backend')
 
 @section('content')
+    <div class="card shadow">
 
-<div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
 
-    <div class="card-header d-flex justify-content-between">
+            <h4>Data Kategori</h4>
 
-        <h4>Data Kategori</h4>
+            <a href="{{ route('categories.create') }}" class="btn btn-success">
 
-        <a href="{{ route('categories.create') }}"
-           class="btn btn-success">
+                + Tambah Kategori
 
-            + Tambah Kategori
+            </a>
 
-        </a>
+        </div>
 
-    </div>
+        <div class="card-body">
 
-    <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-        @if(session('success'))
+            <table class="table table-bordered">
 
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-
-        @endif
-
-        <table class="table table-bordered">
-
-            <thead>
-
-                <tr>
-
-                    <th>No</th>
-
-                    <th>Nama Kategori</th>
-
-                    <th>Aksi</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @forelse($categories as $category)
+                <thead>
 
                     <tr>
 
-                        <td>{{ $loop->iteration }}</td>
+                        <th>No</th>
 
-                        <td>{{ $category->category_name }}</td>
+                        <th>Nama Kategori</th>
 
-                        <td>
-
-                            <a href="{{ route('categories.edit', $category->id) }}"
-   class="btn btn-warning btn-sm">
-    Edit
-</a>
-
-                            <form action="{{ route('categories.destroy',$category->id) }}"
-method="POST"
-class="d-inline">
-
-@csrf
-@method('DELETE')
-
-
-<button type="submit"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Yakin ingin menghapus kategori ini?')">
-
-<i class="fa-solid fa-trash"></i>
-Hapus
-
-</button>
-
-
-</form>
-
-                        </td>
+                        <th>Aksi</th>
 
                     </tr>
 
-                @empty
+                </thead>
 
-                    <tr>
+                <tbody>
 
-                        <td colspan="3" class="text-center">
+                    @forelse($categories as $category)
+                        <tr>
 
-                            Belum ada data.
+                            <td>{{ $loop->iteration }}</td>
 
-                        </td>
+                            <td>{{ $category->category_name }}</td>
 
-                    </tr>
+                            <td>
 
-                @endforelse
+                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
 
-            </tbody>
+                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
+                                    class="d-inline">
 
-        </table>
+                                    @csrf
+                                    @method('DELETE')
+
+
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Yakin ingin menghapus kategori ini?')">
+
+                                        <i class="fa-solid fa-trash"></i>
+                                        Hapus
+
+                                    </button>
+
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td colspan="3" class="text-center">
+
+                                Belum ada data.
+
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
-
-</div>
-
 @endsection

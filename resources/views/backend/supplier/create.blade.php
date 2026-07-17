@@ -1,70 +1,61 @@
 @extends('layouts.backend')
 
 @section('content')
+    <h3>Tambah Supplier</h3>
 
-<h3>Tambah Supplier</h3>
+    <form action="{{ route('suppliers.store') }}" method="POST">
 
-<form action="{{ route('suppliers.store') }}" method="POST">
-
-@csrf
-
-
-<div class="mb-3">
-
-<label>
-Nama Supplier
-</label>
-
-<input type="text"
-name="supplier_name"
-class="form-control">
-
-</div>
+        @csrf
 
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label>
-Nomor Telepon
-</label>
+            <label>
+                Nama Supplier
+            </label>
 
-<input type="text"
-name="phone"
-class="form-control">
+            <input type="text" name="supplier_name" class="form-control">
 
-</div>
+        </div>
 
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label>
-Email
-</label>
+            <label>
+                Nomor Telepon
+            </label>
 
-<input type="email"
-name="email"
-class="form-control">
+            <input type="text" name="phone" class="form-control">
 
-</div>
+        </div>
 
 
-<div class="mb-3">
+        <div class="mb-3">
 
-<label>
-Alamat
-</label>
+            <label>
+                Email
+            </label>
 
-<textarea
-name="address"
-class="form-control"></textarea>
+            <input type="email" name="email" class="form-control">
 
-</div>
+        </div>
 
 
-<button class="btn btn-success">
-Simpan
-</button>
+        <div class="mb-3">
+
+            <label>
+                Alamat
+            </label>
+
+            <textarea name="address" class="form-control"></textarea>
+
+        </div>
 
 
-</form>
+        <button class="btn btn-success">
+            Simpan
+        </button>
+
+
+    </form>
 @endsection

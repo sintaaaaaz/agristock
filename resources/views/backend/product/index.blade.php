@@ -2,280 +2,258 @@
 
 
 @section('content')
-
-<div class="container-fluid">
-
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <h3 class="fw-bold">
-            Manajemen Produk
-        </h3>
+    <div class="container-fluid">
 
 
-        <a href="{{ route('products.create') }}"
-            class="btn btn-success">
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <i class="fa-solid fa-plus"></i>
-            Tambah Produk
-
-        </a>
-
-    </div>
+            <h3 class="fw-bold">
+                Manajemen Produk
+            </h3>
 
 
+            <a href="{{ route('products.create') }}" class="btn btn-success">
 
-    @if(session('success'))
+                <i class="fa-solid fa-plus"></i>
+                Tambah Produk
 
-        <div class="alert alert-success">
-
-            {{ session('success') }}
+            </a>
 
         </div>
 
-    @endif
 
 
+        @if (session('success'))
+            <div class="alert alert-success">
 
+                {{ session('success') }}
 
-    <div class="card shadow-sm">
+            </div>
+        @endif
 
 
-        <div class="card-body">
 
 
-            <div class="table-responsive">
+        <div class="card shadow-sm">
 
 
-                <table class="table table-bordered table-hover align-middle">
+            <div class="card-body">
 
 
-                    <thead class="table-success">
+                <div class="table-responsive">
 
-                        <tr>
 
-                            <th width="50">
-                                No
-                            </th>
+                    <table class="table table-bordered table-hover align-middle">
 
 
-                            <th width="80">
-                                Gambar
-                            </th>
+                        <thead class="table-success">
 
+                            <tr>
 
-                            <th>
-                                Kode Produk
-                            </th>
+                                <th width="50">
+                                    No
+                                </th>
 
 
-                            <th>
-                                Nama Produk
-                            </th>
+                                <th width="80">
+                                    Gambar
+                                </th>
 
 
-                            <th>
-                                Kategori
-                            </th>
+                                <th>
+                                    Kode Produk
+                                </th>
 
 
-                            <th>
-                                Satuan
-                            </th>
+                                <th>
+                                    Nama Produk
+                                </th>
 
 
-                            <th>
-                                Harga Beli
-                            </th>
+                                <th>
+                                    Kategori
+                                </th>
 
 
-                            <th>
-                                Stok
-                            </th>
+                                <th>
+                                    Satuan
+                                </th>
 
-                            <th width="150">
-                                Aksi
-                            </th>
 
+                                <th>
+                                    Harga Beli
+                                </th>
 
-                        </tr>
 
-                    </thead>
+                                <th>
+                                    Stok
+                                </th>
 
+                                <th width="150">
+                                    Aksi
+                                </th>
 
 
-                    <tbody>
+                            </tr>
 
+                        </thead>
 
-                    @forelse($products as $product)
 
 
-                        <tr>
+                        <tbody>
 
 
-                            <td>
-                                {{ $loop->iteration }}
-                            </td>
+                            @forelse($products as $product)
+                                <tr>
 
 
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
 
-                            <td>
 
 
-                                @if($product->image)
+                                    <td>
 
-                                    <img src="{{ asset('uploads/products/'.$product->image) }}"
-                                    width="60"
-                                    height="60"
-                                    class="rounded"
-                                    style="object-fit:cover;">
 
+                                        @if ($product->image)
+                                            <img src="{{ asset('uploads/products/' . $product->image) }}" width="60"
+                                                height="60" class="rounded" style="object-fit:cover;">
+                                        @else
+                                            <span class="text-muted">
+                                                Tidak ada
+                                            </span>
+                                        @endif
 
-                                @else
 
-                                    <span class="text-muted">
-                                        Tidak ada
-                                    </span>
+                                    </td>
 
 
-                                @endif
 
 
-                            </td>
+                                    <td>
+                                        {{ $product->product_code }}
+                                    </td>
 
 
 
 
-                            <td>
-                                {{ $product->product_code }}
-                            </td>
+                                    <td>
+                                        {{ $product->product_name }}
+                                    </td>
 
 
 
+                                    <td>
 
-                            <td>
-                                {{ $product->product_name }}
-                            </td>
+                                        {{ $product->category->category_name ?? '-' }}
 
+                                    </td>
 
 
-                            <td>
 
-                                {{ $product->category->category_name ?? '-' }}
 
-                            </td>
+                                    <td>
+                                        {{ $product->unit->name ?? '-' }}
+                                    </td>
 
 
 
 
-                            <td>
-    {{ $product->unit->name ?? '-' }}
-</td>
+                                    <td>
 
+                                        Rp {{ number_format($product->purchase_price, 0, ',', '.') }}
 
+                                    </td>
 
 
-                            <td>
 
-                                Rp {{ number_format($product->purchase_price,0,',','.') }}
 
-                            </td>
+                                    <td>
 
 
+                                        @if ($product->stock <= $product->minimum_stock)
+                                            <span class="badge bg-danger">
 
+                                                {{ $product->stock }}
 
-                            <td>
+                                            </span>
+                                        @else
+                                            <span class="badge bg-success">
 
+                                                {{ $product->stock }}
 
-                                @if($product->stock <= $product->minimum_stock)
+                                            </span>
+                                        @endif
 
-                                    <span class="badge bg-danger">
 
-                                        {{ $product->stock }}
+                                    </td>
 
-                                    </span>
 
-                                @else
+                                    <td>
 
-                                    <span class="badge bg-success">
+                                        <div class="d-flex gap-2">
 
-                                        {{ $product->stock }}
 
-                                    </span>
+                                            <a href="{{ route('products.edit', $product->id) }}"
+                                                class="btn btn-warning px-3">
 
+                                                <i class="fa-solid fa-pen me-1"></i>
+                                                Edit
 
-                                @endif
+                                            </a>
 
 
-                            </td>
 
+                                            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
 
-                            <td>
 
-    <div class="d-flex gap-2">
+                                                @csrf
+                                                @method('DELETE')
 
 
-        <a href="{{ route('products.edit',$product->id) }}"
-        class="btn btn-warning px-3">
+                                                <button type="submit" class="btn btn-danger px-3"
+                                                    onclick="return confirm('Yakin ingin menghapus produk ini?')">
 
-            <i class="fa-solid fa-pen me-1"></i>
-            Edit
+                                                    <i class="fa-solid fa-trash me-1"></i>
+                                                    Hapus
 
-        </a>
+                                                </button>
 
 
+                                            </form>
 
-        <form action="{{ route('products.destroy',$product->id) }}"
-        method="POST">
 
+                                        </div>
 
-            @csrf
-            @method('DELETE')
+                                    </td>
 
 
-            <button type="submit"
-            class="btn btn-danger px-3"
-            onclick="return confirm('Yakin ingin menghapus produk ini?')">
+                                </tr>
 
-                <i class="fa-solid fa-trash me-1"></i>
-                Hapus
 
-            </button>
+                            @empty
 
 
-        </form>
+                                <tr>
 
+                                    <td colspan="10" class="text-center text-muted">
 
-    </div>
+                                        Belum ada data produk
 
-</td>
+                                    </td>
 
+                                </tr>
+                            @endforelse
 
-                        </tr>
 
+                        </tbody>
 
-                    @empty
 
+                    </table>
 
-                        <tr>
 
-                            <td colspan="10"
-                            class="text-center text-muted">
-
-                                Belum ada data produk
-
-                            </td>
-
-                        </tr>
-
-
-                    @endforelse
-
-
-                    </tbody>
-
-
-                </table>
+                </div>
 
 
             </div>
@@ -285,9 +263,4 @@
 
 
     </div>
-
-
-</div>
-
-
 @endsection

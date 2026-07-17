@@ -11,134 +11,126 @@
 
 <body class="bg-light">
 
-<div class="container">
+    <div class="container">
 
-    <div class="row justify-content-center vh-100 align-items-center">
+        <div class="row justify-content-center vh-100 align-items-center">
 
-        <div class="col-md-4">
+            <div class="col-md-4">
 
-            <div class="card shadow">
+                <div class="card shadow">
 
-                <div class="card-header bg-success text-white text-center">
+                    <div class="card-header bg-success text-white text-center">
 
-                    <h3>🌾 AgriStock</h3>
+                        <h3>🌾 AgriStock</h3>
 
-                    <small>Sistem Manajemen Gudang Hasil Pertanian</small>
+                        <small>Sistem Manajemen Gudang Hasil Pertanian</small>
 
-                </div>
+                    </div>
 
-                <div class="card-body">
-                    @if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+                    <div class="card-body">
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
 
-                    <form action="{{ route('login.process') }}" method="POST">
+                        <form action="{{ route('login.process') }}" method="POST">
 
-                        @csrf
+                            @csrf
 
-                        <div class="mb-3">
+                            <div class="mb-3">
 
-                            <label>Email</label>
+                                <label>Email</label>
 
-                            <input
-                                type="email"
-                                name="email"
-                                class="form-control"
-                                required>
+                                <input type="email" name="email" class="form-control" required>
 
-                                 @error('email')
-    <small class="text-danger">
-        {{ $message }}
-    </small>
-@enderror
+                                @error('email')
+                                    <small class="text-danger">
+                                        {{ $message }}
+                                    </small>
+                                @enderror
 
-                        </div>
+                            </div>
 
-                       
 
-                        <div class="mb-3">
 
-                            <label>Password</label>
+                            <div class="mb-3">
 
-                            <input
-                                type="password"
-                                name="password"
-                                class="form-control"
-                                required>
+                                <label>Password</label>
+
+                                <input type="password" name="password" class="form-control" required>
 
                                 @error('password')
-    <small class="text-danger">
-        {{ $message }}
-    </small>
-@enderror
+                                    <small class="text-danger">
+                                        {{ $message }}
+                                    </small>
+                                @enderror
 
-                        </div>
-                       <div class="mb-3">
-
-
-    <div class="mb-2">
-
-        <img src="{{ captcha_src('default') }}"
-             class="img-fluid border rounded">
-
-    </div>
+                            </div>
+                            <div class="mb-3">
 
 
-    <input
-        type="text"
-        name="captcha"
-        class="form-control"
-        placeholder="Masukkan kode captcha"
-        required>
+                                <div class="mb-2">
+
+                                    <img src="{{ captcha_src('default') }}" class="img-fluid border rounded">
+
+                                </div>
 
 
-    @error('kode captcha salah')
-
-    <small class="text-danger">
-        {{ $message }}
-    </small>
-
-    @enderror
+                                <input type="text" name="captcha" class="form-control"
+                                    placeholder="Masukkan kode captcha" required>
 
 
-</div>
-
-                        <button class="btn btn-success w-100">
-
-                            Login
-
-                        </button>
-
-                 <div class="text-center mt-4">
-    <a href="{{ url('/') }}" class="text-decoration-none" style="color: #6c757d; font-size: 0.9rem; transition: 0.3s;">
-        <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Beranda
-    </a>
-</div>
-
-<style>
-    .text-decoration-none:hover { color: #28a745 !important; } /* Warna berubah jadi hijau saat disorot */
-</style>
-
-                       
+                                @error('kode captcha salah')
+                                    <small class="text-danger">
+                                        {{ $message }}
+                                    </small>
+                                @enderror
 
 
-<div class="text-center mt-3">
+                            </div>
 
-    <small>
-        Belum punya akun?
-    </small>
+                            <button class="btn btn-success w-100">
 
-    <br>
+                                Login
 
-    <a href="{{ route('register') }}">
-        Register Here
-    </a>
+                            </button>
 
-</div>
+                            <div class="text-center mt-4">
+                                <a href="{{ url('/') }}" class="text-decoration-none"
+                                    style="color: #6c757d; font-size: 0.9rem; transition: 0.3s;">
+                                    <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Beranda
+                                </a>
+                            </div>
 
-                    </form>
+                            <style>
+                                .text-decoration-none:hover {
+                                    color: #28a745 !important;
+                                }
+
+                                /* Warna berubah jadi hijau saat disorot */
+                            </style>
+
+
+
+
+                            <div class="text-center mt-3">
+
+                                <small>
+                                    Belum punya akun?
+                                </small>
+
+                                <br>
+
+                                <a href="{{ route('register') }}">
+                                    Register Here
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
 
                 </div>
 
@@ -147,8 +139,6 @@
         </div>
 
     </div>
-
-</div>
 
 </body>
 
