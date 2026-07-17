@@ -111,6 +111,7 @@
                             <th>Tanggal</th>
                             <th>Supplier</th>
                             <th>Keterangan</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

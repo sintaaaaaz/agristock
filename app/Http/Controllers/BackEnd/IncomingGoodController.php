@@ -143,7 +143,10 @@ class IncomingGoodController extends Controller
         'incomingGoodDetails.product.unit'
     ])->findOrFail($id);
 
-    // Mengirimkan variabel ke view show yang sudah kita buat
+    if (Auth::user()->role_id == 2 && $incomingGood->user_id !== Auth::id()) {
+        abort(403);
+    }
+
     return view('backend.incoming_goods.show', compact('incomingGood'));
     }
 

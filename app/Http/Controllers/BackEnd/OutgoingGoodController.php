@@ -32,14 +32,14 @@ class OutgoingGoodController extends Controller
             'quantity'         => 'required|integer|min:1',
         ]);
 
-        // Cek apakah stok produk mencukupi sebelum transaksi diproses
+
         $product = Product::findOrFail($request->product_id);
         if ($product->stock < $request->quantity) {
             return back()->withInput()->withErrors(['quantity' => 'Stok tidak mencukupi! Stok saat ini: ' . $product->stock]);
         }
 
         DB::transaction(function () use ($request) {
-            // 1. Simpan data induk barang keluar
+      
             $outgoing = OutgoingGood::create([
                 'transaction_code' => $request->transaction_code,
                 'transaction_date' => $request->transaction_date,
@@ -47,13 +47,13 @@ class OutgoingGoodController extends Controller
                 'note'             => $request->note,
             ]);
 
-            // 2. Simpan ke detail barang keluar
+    
             $outgoing->outgoingGoodDetails()->create([
                 'product_id' => $request->product_id,
                 'quantity'   => $request->quantity,
             ]);
 
-            // 3. Potong stok produk di gudang
+          
             Product::where('id', $request->product_id)
                 ->decrement('stock', $request->quantity);
         });
@@ -72,7 +72,7 @@ class OutgoingGoodController extends Controller
     public function destroy(OutgoingGood $outgoingGood)
     {
         DB::transaction(function () use ($outgoingGood) {
-            // Kembalikan stok produk sebelum transaksi dihapus
+           
             foreach ($outgoingGood->outgoingGoodDetails as $detail) {
                 Product::where('id', $detail->product_id)
                     ->increment('stock', $detail->quantity);

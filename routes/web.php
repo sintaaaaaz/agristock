@@ -51,6 +51,7 @@ Route::get('/user/input-barang',
     // Tambahkan ini di bawah rute cetak dashboard barang masuk yang sudah ada
 Route::get('/dashboard/export-outgoing-pdf', [DashboardController::class, 'exportOutgoingPdf'])->name('dashboard.outgoing.pdf');
 Route::get('/dashboard/export-outgoing-excel', [DashboardController::class, 'exportOutgoingExcel'])->name('dashboard.outgoing.excel');
+Route::get('/incoming-goods/{id}', [IncomingGoodController::class, 'show'])->name('incoming-goods.show');
     
 }); // <--- Penutup grup middleware yang sebelumnya hilang
 
